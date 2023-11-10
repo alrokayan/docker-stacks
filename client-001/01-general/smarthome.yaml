@@ -1,0 +1,95 @@
+version: "3.9"
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: homeassistant/home-assistant:stable
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    environment:
+      - DOCKER_TLS_VERIFY=0
+    volumes:
+      - /docker-volumes/homeassistant/data:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+    privileged: true
+    network_mode: host
+      
+  esphome:
+    container_name: esphome
+    image: ghcr.io/esphome/esphome
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    volumes:
+      - /docker-large-volumes/esphome/data:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: always
+    privileged: true
+    network_mode: host
+
+  mqtt-explorer:
+    container_name: mqtt-explorer
+    image: smeagolworms4/mqtt-explorer
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    ports:
+      - '4000:4000'
+    environment:
+      TZ: 'Asia/Riyadh'
+    volumes:
+      - '/docker-volumes/mqtt-explorer/data:/mqtt-explorer/config'
+    restart: always
+
+  node-red:
+    image: nodered/node-red:latest
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    container_name: node-red
+    restart: always
+    volumes:
+      - /docker-volumes/node-red/data:/data
+    environment:
+      TZ: 'Asia/Riyadh'
+    ports:
+      - "1880:1880"
+    user: "0:0"
+
+  eufy:
+    image: bropat/eufy-security-ws
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    container_name: eufy
+    volumes:
+      - /docker-volumes/eufy/data:/data
+    ports:
+      - "3000:3000/tcp"
+    environment:
+      USERNAME: "ousaimi.home@gmail.com"
+      PASSWORD: "M@jed2030"
+      COUNTRY: "SA"
+    restart: always
+
+  go2rtc:
+    image: alexxit/go2rtc
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    network_mode: host
+    container_name: go2rtc
+    privileged: true 
+    restart: always
+    environment:
+      - TZ=Asia/Riyadh
+    volumes:
+      - "/docker-volumes/go2rtc/data:/config"
