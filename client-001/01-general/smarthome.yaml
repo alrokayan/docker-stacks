@@ -8,9 +8,9 @@ services:
         max-size: "10m"
         max-file: "3"
     environment:
-      - DOCKER_TLS_VERIFY=0
+      - DOCKER_TLS_VERIFY=${DOCKER_TLS_VERIFY}
     volumes:
-      - /docker-volumes/homeassistant/data:/config
+      - ${DOCKER_VOLUMES}/homeassistant/data:/config
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
     restart: always
@@ -25,7 +25,7 @@ services:
         max-size: "10m"
         max-file: "3"
     volumes:
-      - /docker-large-volumes/esphome/data:/config
+      - ${DOCKER_LARGE_VOLUMES}/esphome/data:/config
       - /etc/localtime:/etc/localtime:ro
     restart: always
     privileged: true
@@ -39,11 +39,11 @@ services:
         max-size: "10m"
         max-file: "3"
     ports:
-      - '4000:4000'
+      - 4000:4000
     environment:
-      TZ: 'Asia/Riyadh'
+      TZ: ${TZ}
     volumes:
-      - '/docker-volumes/mqtt-explorer/data:/mqtt-explorer/config'
+      - '${DOCKER_VOLUMES}/mqtt-explorer/data:/mqtt-explorer/config'
     restart: always
 
   node-red:
@@ -55,11 +55,11 @@ services:
     container_name: node-red
     restart: always
     volumes:
-      - /docker-volumes/node-red/data:/data
+      - ${DOCKER_VOLUMES}/node-red/data:/data
     environment:
-      TZ: 'Asia/Riyadh'
+      TZ: ${TZ}
     ports:
-      - "1880:1880"
+      - 1880:1880
     user: "0:0"
 
   eufy:
@@ -70,13 +70,13 @@ services:
         max-file: "3"
     container_name: eufy
     volumes:
-      - /docker-volumes/eufy/data:/data
+      - ${DOCKER_VOLUMES}/eufy/data:/data
     ports:
-      - "3000:3000/tcp"
+      - 3000:3000/tcp
     environment:
-      USERNAME: "ousaimi.home@gmail.com"
-      PASSWORD: "M@jed2030"
-      COUNTRY: "SA"
+      USERNAME: ${EUFY_USERNAME}
+      PASSWORD: ${EUFY_PASSWORD}
+      COUNTRY: ${COUNTRY}
     restart: always
 
   go2rtc:
@@ -90,6 +90,6 @@ services:
     privileged: true 
     restart: always
     environment:
-      - TZ=Asia/Riyadh
+      - TZ=${TZ}
     volumes:
-      - "/docker-volumes/go2rtc/data:/config"
+      - "${DOCKER_VOLUMES}/go2rtc/data:/config"
