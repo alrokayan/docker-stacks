@@ -13,7 +13,7 @@ services:
     shm_size: "120mb"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${DOCKER-VOLUMES}/frigate/data:/config
+      - ${DOCKER_VOLUMES}/frigate/data:/config
       - type: volume
         source: frigate_media_volume
         target: /media/frigate
@@ -34,7 +34,7 @@ services:
     environment:
       - DOCKER_TLS_VERIFY=${DOCKER_TLS_VERIFY}
     volumes:
-      - ${DOCKER-VOLUMES}/homeassistant/data:/config
+      - ${DOCKER_VOLUMES}/homeassistant/data:/config
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
     restart: always
@@ -52,9 +52,9 @@ services:
       - TZ${TZ}
     restart: always
     volumes:
-      - ${DOCKER-VOLUMES}/mqtt/config:/mosquitto/config
-      - ${DOCKER-VOLUMES}/mqtt/data:/mosquitto/data
-      - ${DOCKER-VOLUMES}/mqtt/log:/mosquitto/log
+      - ${DOCKER_VOLUMES}/mqtt/config:/mosquitto/config
+      - ${DOCKER_VOLUMES}/mqtt/data:/mosquitto/data
+      - ${DOCKER_VOLUMES}/mqtt/log:/mosquitto/log
     network_mode: host
 
   zigbee2mqtt-gf:
@@ -68,7 +68,7 @@ services:
     privileged: true
     network_mode: host
     volumes:
-      - ${DOCKER-VOLUMES}/zigbee2mqtt-gf/data:/app/data
+      - ${DOCKER_VOLUMES}/zigbee2mqtt-gf/data:/app/data
       - /run/udev:/run/udev:ro
     environment:
       - TZ=${TZ}
@@ -84,7 +84,7 @@ services:
     privileged: true
     network_mode: host
     volumes:
-      - ${DOCKER-VOLUMES}/zigbee2mqtt-f2/data:/app/data
+      - ${DOCKER_VOLUMES}/zigbee2mqtt-f2/data:/app/data
       - /run/udev:/run/udev:ro
     environment:
       - TZ=${TZ}
@@ -100,7 +100,7 @@ services:
     privileged: true
     network_mode: host
     volumes:
-      - ${DOCKER-VOLUMES}/zigbee2mqtt-f1/data:/app/data
+      - ${DOCKER_VOLUMES}/zigbee2mqtt-f1/data:/app/data
       - /run/udev:/run/udev:ro
     environment:
       - TZ=${TZ}
