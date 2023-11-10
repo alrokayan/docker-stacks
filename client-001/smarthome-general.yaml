@@ -93,3 +93,31 @@ services:
       - TZ=${TZ}
     volumes:
       - "${DOCKER_VOLUMES}/go2rtc/data:/config"
+
+  # pxe:
+  #   container_name: pxe
+  #   image: nginx:alpine
+  #   restart: always
+  #   ports:
+  #     - 88:80
+  #   volumes:
+  #     - ${DOCKER_LARGE_VOLUMES}/pxe/data:/srv
+  #     - ${DOCKER_LARGE_VOLUMES}/pxe/data/nginx.conf:/etc/nginx/conf.d/default.conf
+      
+  # tftp:
+  #   image: docker.io/kalaksi/tftpd
+  #   container_name: tftp
+  #   restart: always
+  #   environment:
+  #     TFTPD_BIND_ADDRESS: ${TFTPD_BIND_ADDRESS}
+  #     TFTPD_EXTRA_ARGS: ${TFTPD_EXTRA_ARGS}
+  #   cap_drop:
+  #     - ALL
+  #   cap_add:
+  #     - SETUID
+  #     - SETGID
+  #     - SYS_CHROOT
+  #   ports:
+  #     - 69:1069/udp
+  #   volumes:
+  #     - ${DOCKER_LARGE_VOLUMES}/tftp/data:/tftpboot

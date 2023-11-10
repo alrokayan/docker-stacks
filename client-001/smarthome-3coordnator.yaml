@@ -3,8 +3,8 @@ services:
   frigate:
     container_name: frigate
     privileged: true
-    network_mode: "host"
     restart: always
+    network_mode: host
     image: ghcr.io/blakeblackshear/frigate:stable
     logging:
       options:
@@ -13,7 +13,7 @@ services:
     shm_size: "120mb"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /docker-volumes/frigate/data:/config
+      - ${DOCKER-VOLUMES}/frigate/data:/config
       - type: volume
         source: frigate_media_volume
         target: /media/frigate
@@ -23,7 +23,7 @@ services:
         target: /tmp/cache
         tmpfs:
           size: 1000000000
-
+      
   homeassistant:
     container_name: homeassistant
     image: homeassistant/home-assistant:stable
@@ -32,9 +32,9 @@ services:
         max-size: "10m"
         max-file: "3"
     environment:
-      - DOCKER_TLS_VERIFY=0
+      - DOCKER_TLS_VERIFY=${DOCKER_TLS_VERIFY}
     volumes:
-      - /docker-volumes/homeassistant/data:/config
+      - ${DOCKER-VOLUMES}/homeassistant/data:/config
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
     restart: always
@@ -49,33 +49,65 @@ services:
         max-size: "10m"
         max-file: "3"
     environment:
-      - TZ=Asia/Riyadh
+      - TZ${TZ}
     restart: always
     volumes:
-      - /docker-volumes/mqtt/config:/mosquitto/config
-      - /docker-volumes/mqtt/data:/mosquitto/data
-      - /docker-volumes/mqtt/log:/mosquitto/log
+      - ${DOCKER-VOLUMES}/mqtt/config:/mosquitto/config
+      - ${DOCKER-VOLUMES}/mqtt/data:/mosquitto/data
+      - ${DOCKER-VOLUMES}/mqtt/log:/mosquitto/log
     network_mode: host
 
-  zigbee2mqtt:
-    container_name: zigbee2mqtt
+  zigbee2mqtt-gf:
+    container_name: zigbee2mqtt-gf
     restart: always
     image: koenkk/zigbee2mqtt
     logging:
       options:
         max-size: "10m"
         max-file: "3"
-    network_mode: host
     privileged: true
+    network_mode: host
     volumes:
-      - /docker-volumes/zigbee2mqtt/data:/app/data
+      - ${DOCKER-VOLUMES}/zigbee2mqtt-gf/data:/app/data
       - /run/udev:/run/udev:ro
     environment:
-      - TZ=Asia/Riyadh
+      - TZ=${TZ}
+      
+  zigbee2mqtt-f2:
+    container_name: zigbee2mqtt-f2
+    restart: always
+    image: koenkk/zigbee2mqtt
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    privileged: true
+    network_mode: host
+    volumes:
+      - ${DOCKER-VOLUMES}/zigbee2mqtt-f2/data:/app/data
+      - /run/udev:/run/udev:ro
+    environment:
+      - TZ=${TZ}
+
+  zigbee2mqtt-f1:
+    container_name: zigbee2mqtt-f1
+    restart: always
+    image: koenkk/zigbee2mqtt
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    privileged: true
+    network_mode: host
+    volumes:
+      - ${DOCKER-VOLUMES}/zigbee2mqtt-f1/data:/app/data
+      - /run/udev:/run/udev:ro
+    environment:
+      - TZ=${TZ}
 
 volumes:
   frigate_media_volume:
     driver_opts:
-      type: cifs    
-      device: //10.10.100.101/chalet
-      o: "username=frigate,password=QJBo5fQK8DL2jsPkqe3BGuFC,vers=3.0,uid=1026,gid=101"
+      type: ${DOCKER_VOLUME_DRIVER}    
+      device: ${DOCKER_VOLUME_DEVICE}
+      o: ${DOCKER_VOLUME_OPTIONS}
