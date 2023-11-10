@@ -1,0 +1,113 @@
+version: "3.9"
+services:
+  dockerproxy:
+    image: tecnativa/docker-socket-proxy
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    container_name: dockerproxy
+    privileged: true
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 2375:2375
+    environment:
+      BUILD: 1
+      COMMIT: 1
+      CONFIGS: 1
+      CONTAINERS: 1
+      DISTRIBUTION: 1
+      EXEC: 1
+      IMAGES: 1
+      INFO: 1
+      NETWORKS: 1
+      NODES: 1
+      PLUGINS: 1
+      SERVICES: 1
+      SESSSION: 1
+      SWARM: 1
+      POST: 1
+
+  backup:
+    container_name: backup
+    image: offen/docker-volume-backup:v2
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    environment:
+      TZ: ${TZ}
+      BACKUP_CRON_EXPRESSION: ${BACKUP_CRON_EXPRESSION}
+      BACKUP_FILENAME: ${BACKUP_FILENAME}
+      BACKUP_LATEST_SYMLINK: ${BACKUP_LATEST_SYMLINK}
+      BACKUP_EXCLUDE_REGEXP: ${BACKUP_EXCLUDE_REGEXP}
+      WEBDAV_URL: ${WEBDAV_URL}
+      WEBDAV_PATH: ${WEBDAV_PATH}
+      WEBDAV_USERNAME: ${WEBDAV_USERNAME}
+      WEBDAV_PASSWORD: ${WEBDAV_PASSWORD}
+      BACKUP_RETENTION_DAYS: ${BACKUP_RETENTION_DAYS}
+      GZIP_PARALLELISM: ${GZIP_PARALLELISM}
+    restart: always
+    volumes:
+      - ${DOCKER_VOLUMES}:/backup:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+
+  tailscale:
+    privileged: true
+    network_mode: "host"
+    container_name: tailscale
+    image: tailscale/tailscale:latest
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    volumes:
+        - "${DOCKER_LARGE_VOLUMES}/tailscale/data:/var/lib"
+        - "/dev/net/tun:/dev/net/tun"
+    cap_add:
+        - NET_ADMIN
+        - NET_RAW
+    command: tailscaled
+    restart: always
+    
+  filebrowser:
+    container_name: filebrowser
+    image: filebrowser/filebrowser:s6
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+    restart: always
+    volumes:
+      - /:/srv
+      - ${DOCKER_VOLUMES}/filebrowser/data:/config
+      - ${DOCKER_VOLUMES}/filebrowser/data/database:/database
+    ports:
+      - 8080:80
+
+  watchtower:
+    environment:
+      WATCHTOWER_HTTP_API_TOKEN: ${WATCHTOWER_HTTP_API_TOKEN}
+      WATCHTOWER_HTTP_API_UPDATE: $WATCHTOWER_HTTP_API_UPDATE}
+      WATCHTOWER_HTTP_API_PERIODIC_POLLS: ${WATCHTOWER_HTTP_API_PERIODIC_POLLS}
+      WATCHTOWER_SCHEDULE: ${WATCHTOWER_SCHEDULE}
+      TZ: ${TZ}
+      WATCHTOWER_CLEANUP: ${WATCHTOWER_CLEANUP}
+    image: containrrr/watchtower
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    container_name: watchtower
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 10444:8080

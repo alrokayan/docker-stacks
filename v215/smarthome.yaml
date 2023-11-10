@@ -1,0 +1,81 @@
+version: "3.9"
+services:
+  frigate:
+    container_name: frigate
+    privileged: true
+    network_mode: "host"
+    restart: always
+    image: ghcr.io/blakeblackshear/frigate:stable
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    shm_size: "120mb"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKER_VOLUMES}/frigate/data:/config
+      - type: volume
+        source: frigate_media_volume
+        target: /media/frigate
+        volume:
+          nocopy: true
+      - type: tmpfs
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+
+  homeassistant:
+    container_name: homeassistant
+    image: homeassistant/home-assistant:stable
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    environment:
+      - DOCKER_TLS_VERIFY=${DOCKER_TLS_VERIFY}
+    volumes:
+      - ${DOCKER_VOLUMES}/homeassistant/data:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+    privileged: true
+    network_mode: host
+
+  mqtt:
+    container_name: mqtt
+    image: eclipse-mosquitto
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    environment:
+      - TZ=Asia/Riyadh
+    restart: always
+    volumes:
+      - ${DOCKER_VOLUMES}/mqtt/config:/mosquitto/config
+      - ${DOCKER_VOLUMES}/mqtt/data:/mosquitto/data
+      - ${DOCKER_VOLUMES}/mqtt/log:/mosquitto/log
+    network_mode: host
+
+  zigbee2mqtt:
+    container_name: zigbee2mqtt
+    restart: always
+    image: koenkk/zigbee2mqtt
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    network_mode: host
+    privileged: true
+    volumes:
+      - ${DOCKER_VOLUMES}/zigbee2mqtt/data:/app/data
+      - /run/udev:/run/udev:ro
+    environment:
+      - TZ=${TZ}
+
+volumes:
+  frigate_media_volume:
+    driver_opts:
+      type: ${DOCKER_VOLUME_DRIVER}    
+      device: ${DOCKER_VOLUME_DEVICE}
+      o: ${DOCKER_VOLUME_OPTIONS}
