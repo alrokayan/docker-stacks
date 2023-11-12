@@ -57,7 +57,7 @@ services:
 
   tailscale:
     privileged: true
-    container_name: tailscale
+    network_mode: "host"
     image: tailscale/tailscale:stable
     logging:
       options:
