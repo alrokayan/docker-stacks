@@ -17,19 +17,19 @@ services:
     privileged: true
     network_mode: host
       
-  esphome:
-    container_name: esphome
-    image: ghcr.io/esphome/esphome
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "3"
-    volumes:
-      - ${DOCKER_LARGE_VOLUMES}/esphome/data:/config
-      - /etc/localtime:/etc/localtime:ro
-    restart: always
-    privileged: true
-    network_mode: host
+  # esphome:
+  #   container_name: esphome
+  #   image: ghcr.io/esphome/esphome
+  #   logging:
+  #     options:
+  #       max-size: "10m"
+  #       max-file: "3"
+  #   volumes:
+  #     - ${DOCKER_LARGE_VOLUMES}/esphome/data:/config
+  #     - /etc/localtime:/etc/localtime:ro
+  #   restart: always
+  #   privileged: true
+  #   network_mode: host
 
   mqtt-explorer:
     container_name: mqtt-explorer
@@ -79,20 +79,20 @@ services:
       COUNTRY: ${COUNTRY}
     restart: always
 
-  go2rtc:
-    image: alexxit/go2rtc
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "3"
-    network_mode: host
-    container_name: go2rtc
-    privileged: true 
-    restart: always
-    environment:
-      - TZ=${TZ}
-    volumes:
-      - "${DOCKER_VOLUMES}/go2rtc/data:/config"
+  # go2rtc:
+  #   image: alexxit/go2rtc
+  #   logging:
+  #     options:
+  #       max-size: "10m"
+  #       max-file: "3"
+  #   network_mode: host
+  #   container_name: go2rtc
+  #   privileged: true 
+  #   restart: always
+  #   environment:
+  #     - TZ=${TZ}
+  #   volumes:
+  #     - "${DOCKER_VOLUMES}/go2rtc/data:/config"
 
   # pxe:
   #   container_name: pxe
