@@ -57,9 +57,8 @@ services:
 
   tailscale:
     privileged: true
-    network_mode: "host"
     container_name: tailscale
-    image: tailscale/tailscale:latest
+    image: tailscale/tailscale:stable
     logging:
       options:
         max-size: "10m"
@@ -68,8 +67,8 @@ services:
         - "${DOCKER_VOLUMES}/tailscale/data:/var/lib"
         - "/dev/net/tun:/dev/net/tun"
     cap_add:
-        - NET_ADMIN
-        - NET_RAW
+        - net_admin
+        - sys_module
     command: tailscaled
     restart: always
     
