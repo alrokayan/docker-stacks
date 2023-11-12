@@ -65,7 +65,7 @@ services:
         max-size: "10m"
         max-file: "3"
     volumes:
-        - "${DOCKER_LARGE_VOLUMES}/tailscale/data:/var/lib"
+        - "${DOCKER_VOLUMES}/tailscale/data:/var/lib"
         - "/dev/net/tun:/dev/net/tun"
     cap_add:
         - NET_ADMIN
