@@ -1,29 +1,5 @@
 version: "3.9"
 services:
-  frigate:
-    container_name: frigate
-    privileged: true
-    restart: always
-    network_mode: host
-    image: ghcr.io/blakeblackshear/frigate:stable
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "3"
-    shm_size: "120mb"
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ${DOCKER_VOLUMES}/frigate/data:/config
-      - type: volume
-        source: frigate_media_volume
-        target: /media/frigate
-        volume:
-          nocopy: true
-      - type: tmpfs
-        target: /tmp/cache
-        tmpfs:
-          size: 1000000000
-      
   homeassistant:
     container_name: homeassistant
     image: homeassistant/home-assistant:stable
