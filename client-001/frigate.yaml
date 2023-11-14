@@ -11,6 +11,8 @@ services:
         max-size: "10m"
         max-file: "3"
     shm_size: "120mb"
+    devices:
+      - /dev/dri:/dev/dri
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKER_VOLUMES}/frigate/data:/config
