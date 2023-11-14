@@ -1,0 +1,121 @@
+version: "3.9"
+services:
+  frigate:
+    container_name: frigate
+    privileged: true
+    network_mode: "host"
+    restart: always
+    image: ghcr.io/blakeblackshear/frigate:stable
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    shm_size: "120mb"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKER_VOLUMES}/frigate/data:/config
+      - ${MEDIA_VOLUMES}/frigate:/media/frigate
+      - type: tmpfs
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+
+  dockerproxy:
+    image: tecnativa/docker-socket-proxy
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    container_name: dockerproxy
+    privileged: true
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 2375:2375
+    environment:
+      BUILD: 1
+      COMMIT: 1
+      CONFIGS: 1
+      CONTAINERS: 1
+      DISTRIBUTION: 1
+      EXEC: 1
+      IMAGES: 1
+      INFO: 1
+      NETWORKS: 1
+      NODES: 1
+      PLUGINS: 1
+      SERVICES: 1
+      SESSSION: 1
+      SWARM: 1
+      POST: 1
+
+  backup:
+    container_name: backup
+    image: offen/docker-volume-backup:v2
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    environment:
+      TZ: ${TZ}
+      BACKUP_CRON_EXPRESSION: ${BACKUP_CRON_EXPRESSION}
+      BACKUP_FILENAME: ${BACKUP_FILENAME}
+      BACKUP_LATEST_SYMLINK: ${BACKUP_LATEST_SYMLINK}
+      BACKUP_EXCLUDE_REGEXP: ${BACKUP_EXCLUDE_REGEXP}
+      WEBDAV_URL: ${WEBDAV_URL}
+      WEBDAV_PATH: ${WEBDAV_PATH}
+      WEBDAV_USERNAME: ${WEBDAV_USERNAME}
+      WEBDAV_PASSWORD: ${WEBDAV_PASSWORD}
+      BACKUP_RETENTION_DAYS: ${BACKUP_RETENTION_DAYS}
+      GZIP_PARALLELISM: ${GZIP_PARALLELISM}
+    restart: always
+    volumes:
+      - ${DOCKER_VOLUMES}:/backup:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+
+  tailscale:
+    container_name: tailscale
+    privileged: true
+    network_mode: "host"
+    image: tailscale/tailscale:stable
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    volumes:
+        - "${DOCKER_VOLUMES}/tailscale/data:/var/lib"
+        - "/dev/net/tun:/dev/net/tun"
+    cap_add:
+        - net_admin
+        - sys_module
+    command: tailscaled
+    restart: always
+    
+  watchtower:
+    environment:
+      WATCHTOWER_HTTP_API_TOKEN: ${WATCHTOWER_HTTP_API_TOKEN}
+      WATCHTOWER_HTTP_API_UPDATE: $WATCHTOWER_HTTP_API_UPDATE}
+      WATCHTOWER_HTTP_API_PERIODIC_POLLS: ${WATCHTOWER_HTTP_API_PERIODIC_POLLS}
+      WATCHTOWER_SCHEDULE: ${WATCHTOWER_SCHEDULE}
+      TZ: ${TZ}
+      WATCHTOWER_CLEANUP: ${WATCHTOWER_CLEANUP}
+    image: containrrr/watchtower
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    container_name: watchtower
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 10444:8080
+
+volumes:
+  frigate_media_volume:
+    driver_opts:
+      type: ${DOCKER_VOLUME_DRIVER}
+      device: ${DOCKER_VOLUME_DEVICE}
+      o: ${DOCKER_VOLUME_OPTIONS}
