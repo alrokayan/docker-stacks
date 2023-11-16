@@ -61,8 +61,18 @@ services:
       - TZ=${TZ}
     volumes:
       - ${DOCKER_VOLUMES}/duplicati/data:/config
-      - duplicati-backups:/backups
+      - type: volume
+        source: duplicati-backups
+        target: /backups
+        volume:
+          nocopy: true
       - ${DOCKER_VOLUMES}:/source
+      - type: volume
+        source: [volume-name]
+        target: /nfs
+        volume:
+          nocopy: true
+
     ports:
       - 8200:8200
     restart: unless-stopped
