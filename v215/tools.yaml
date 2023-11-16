@@ -34,8 +34,8 @@ services:
     image: lscr.io/linuxserver/duplicati:latest
     container_name: duplicati
     environment:
-      - PUID=${PUID2}
-      - PGID=${PGID2}
+      - PUID=${PUID}
+      - PGID=${PGID}
       - TZ=${TZ}
     volumes:
       - ${DOCKER_VOLUMES}/duplicati/data:/config
