@@ -39,7 +39,7 @@ services:
       - TZ=${TZ}
     volumes:
       - ${DOCKER_VOLUMES}/duplicati/data:/config
-      - ${DOCKER_LARGE_VOLUMES}/duplicati/backups:/backups
+      - duplicati-backups:/duplicati/backups:/backups
       - ${DOCKER_VOLUMES}:/source
     ports:
       - 8200:8200
