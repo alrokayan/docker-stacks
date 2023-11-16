@@ -4,7 +4,7 @@ services:
     container_name: frigate
     privileged: true
     network_mode: "host"
-    restart: always
+    restart: unless-stopped
     image: ghcr.io/blakeblackshear/frigate:stable
     logging:
       options:
@@ -30,7 +30,7 @@ services:
         max-file: "3"
     container_name: dockerproxy
     privileged: true
-    restart: always
+    restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
@@ -71,7 +71,7 @@ services:
       WEBDAV_PASSWORD: ${WEBDAV_PASSWORD}
       BACKUP_RETENTION_DAYS: ${BACKUP_RETENTION_DAYS}
       GZIP_PARALLELISM: ${GZIP_PARALLELISM}
-    restart: always
+    restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUMES}:/backup:ro
       - /etc/timezone:/etc/timezone:ro
@@ -93,7 +93,7 @@ services:
         - net_admin
         - sys_module
     command: tailscaled
-    restart: always
+    restart: unless-stopped
     
   watchtower:
     environment:
@@ -109,7 +109,7 @@ services:
         max-size: "10m"
         max-file: "3"
     container_name: watchtower
-    restart: always
+    restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:

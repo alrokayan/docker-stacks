@@ -13,7 +13,7 @@ services:
       - ${DOCKER_VOLUMES}/homeassistant/data:/config
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
-    restart: always
+    restart: unless-stopped
     privileged: true
     network_mode: host
 
@@ -26,7 +26,7 @@ services:
         max-file: "3"
     environment:
       - TZ=Asia/Riyadh
-    restart: always
+    restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUMES}/mqtt/config:/mosquitto/config
       - ${DOCKER_VOLUMES}/mqtt/data:/mosquitto/data
@@ -35,7 +35,7 @@ services:
 
   zigbee2mqtt:
     container_name: zigbee2mqtt
-    restart: always
+    restart: unless-stopped
     image: koenkk/zigbee2mqtt
     logging:
       options:

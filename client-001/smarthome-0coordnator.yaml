@@ -13,7 +13,7 @@ services:
       - ${DOCKER_VOLUMES}/homeassistant/data:/config
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
-    restart: always
+    restart: unless-stopped
     privileged: true
     network_mode: host
       
@@ -27,7 +27,7 @@ services:
   #   volumes:
   #     - ${DOCKER_LARGE_VOLUMES}/esphome/data:/config
   #     - /etc/localtime:/etc/localtime:ro
-  #   restart: always
+  #   restart: unless-stopped
   #   privileged: true
   #   network_mode: host
 
@@ -44,7 +44,7 @@ services:
       TZ: ${TZ}
     volumes:
       - '${DOCKER_VOLUMES}/mqtt-explorer/data:/mqtt-explorer/config'
-    restart: always
+    restart: unless-stopped
 
   node-red:
     image: nodered/node-red:latest
@@ -53,7 +53,7 @@ services:
         max-size: "10m"
         max-file: "3"
     container_name: node-red
-    restart: always
+    restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUMES}/node-red/data:/data
     environment:
@@ -77,7 +77,7 @@ services:
       USERNAME: ${EUFY_USERNAME}
       PASSWORD: ${EUFY_PASSWORD}
       COUNTRY: ${COUNTRY}
-    restart: always
+    restart: unless-stopped
 
   # go2rtc:
   #   image: alexxit/go2rtc
@@ -88,7 +88,7 @@ services:
   #   network_mode: host
   #   container_name: go2rtc
   #   privileged: true 
-  #   restart: always
+  #   restart: unless-stopped
   #   environment:
   #     - TZ=${TZ}
   #   volumes:
@@ -97,7 +97,7 @@ services:
   # pxe:
   #   container_name: pxe
   #   image: nginx:alpine
-  #   restart: always
+  #   restart: unless-stopped
   #   ports:
   #     - 88:80
   #   volumes:
@@ -107,7 +107,7 @@ services:
   # tftp:
   #   image: docker.io/kalaksi/tftpd
   #   container_name: tftp
-  #   restart: always
+  #   restart: unless-stopped
   #   environment:
   #     TFTPD_BIND_ADDRESS: ${TFTPD_BIND_ADDRESS}
   #     TFTPD_EXTRA_ARGS: ${TFTPD_EXTRA_ARGS}
