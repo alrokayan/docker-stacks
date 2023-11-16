@@ -39,11 +39,7 @@ services:
       - TZ=${TZ}
     volumes:
       - ${DOCKER_VOLUMES}/duplicati/data:/config
-      - type: volume
-        source: duplicati-backups
-        target: /backups
-        volume:
-          nocopy: true
+      - ${DOCKER_LARGE_VOLUMES}/duplicati/backups:/backups
       - ${DOCKER_VOLUMES}:/source
     ports:
       - 8200:8200
@@ -130,7 +126,3 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - 10444:8080
-
-volumes:
-  duplicati-backups:
-    external: true
