@@ -67,11 +67,6 @@ services:
         volume:
           nocopy: true
       - ${DOCKER_VOLUMES}:/source
-      - type: volume
-        source: [volume-name]
-        target: /nfs
-        volume:
-          nocopy: true
 
     ports:
       - 8200:8200
