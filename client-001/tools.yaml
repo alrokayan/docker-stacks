@@ -126,3 +126,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - 10444:8080
+
+volumes:
+  duplicati-backups:
