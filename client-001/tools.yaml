@@ -30,6 +30,21 @@ services:
       SWARM: 1
       POST: 1
 
+  duplicati:
+    image: lscr.io/linuxserver/duplicati:latest
+    container_name: duplicati
+    environment:
+      - PUID=${PUID2}
+      - PGID=${PGID2}
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKER_VOLUMES}/duplicati/data:/config
+      - ${DOCKER_LARGE_VOLUMES}/duplicati/backups:/backups
+      - ${DOCKER_VOLUMES}:/source
+    ports:
+      - 8200:8200
+    restart: unless-stopped
+
   backup:
     container_name: backup
     image: offen/docker-volume-backup:v2
