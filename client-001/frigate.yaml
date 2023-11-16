@@ -139,4 +139,3 @@ volumes:
   frigate-camera-recordings:
     external: true
   duplicati-backups:
-    external: true
