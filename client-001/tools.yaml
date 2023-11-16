@@ -133,3 +133,4 @@ services:
 
 volumes:
   duplicati-backups:
+    external: true
