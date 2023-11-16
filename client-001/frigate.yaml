@@ -16,7 +16,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKER_VOLUMES}/frigate/data:/config
-      - ${MEDIA_VOLUMES}/frigate:/media/frigate
+      - frigate-camera-recordings:/media/frigate
       - type: tmpfs
         target: /tmp/cache
         tmpfs:
@@ -51,6 +51,21 @@ services:
       SESSSION: 1
       SWARM: 1
       POST: 1
+
+  duplicati:
+    image: lscr.io/linuxserver/duplicati:latest
+    container_name: duplicati
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKER_VOLUMES}/duplicati/data:/config
+      - duplicati-backups:/duplicati/backups:/backups
+      - ${DOCKER_VOLUMES}:/source
+    ports:
+      - 8200:8200
+    restart: unless-stopped
 
   backup:
     container_name: backup
@@ -116,8 +131,5 @@ services:
       - 10444:8080
 
 volumes:
-  frigate_media_volume:
-    driver_opts:
-      type: ${DOCKER_VOLUME_DRIVER}
-      device: ${DOCKER_VOLUME_DEVICE}
-      o: ${DOCKER_VOLUME_OPTIONS}
+  frigate-camera-recordings:
+  duplicati-backups:
