@@ -1,0 +1,98 @@
+version: "3.9"
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: homeassistant/home-assistant:stable
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    environment:
+      - DOCKER_TLS_VERIFY=${DOCKER_TLS_VERIFY}
+    volumes:
+      - ${DOCKER_VOLUMES}/homeassistant/data:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+
+  mqtt:
+    container_name: mqtt
+    image: eclipse-mosquitto
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    environment:
+      - TZ${TZ}
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUMES}/mqtt/config:/mosquitto/config
+      - ${DOCKER_VOLUMES}/mqtt/data:/mosquitto/data
+      - ${DOCKER_VOLUMES}/mqtt/log:/mosquitto/log
+    network_mode: host
+
+  zigbee2mqtt-gf:
+    container_name: zigbee2mqtt-gf
+    restart: unless-stopped
+    image: koenkk/zigbee2mqtt
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    privileged: true
+    network_mode: host
+    volumes:
+      - ${DOCKER_VOLUMES}/zigbee2mqtt-gf/data:/app/data
+      - /run/udev:/run/udev:ro
+    environment:
+      - TZ=${TZ}
+  
+  zigbee2mqtt-f1:
+    container_name: zigbee2mqtt-f1
+    restart: unless-stopped
+    image: koenkk/zigbee2mqtt
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    privileged: true
+    network_mode: host
+    volumes:
+      - ${DOCKER_VOLUMES}/zigbee2mqtt-f1/data:/app/data
+      - /run/udev:/run/udev:ro
+    environment:
+      - TZ=${TZ}
+
+  zigbee2mqtt-f2:
+    container_name: zigbee2mqtt-f2
+    restart: unless-stopped
+    image: koenkk/zigbee2mqtt
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    privileged: true
+    network_mode: host
+    volumes:
+      - ${DOCKER_VOLUMES}/zigbee2mqtt-f2/data:/app/data
+      - /run/udev:/run/udev:ro
+    environment:
+      - TZ=${TZ}
+
+  zigbee2mqtt-f3:
+    container_name: zigbee2mqtt-f3
+    restart: unless-stopped
+    image: koenkk/zigbee2mqtt
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    privileged: true
+    network_mode: host
+    volumes:
+      - ${DOCKER_VOLUMES}/zigbee2mqtt-f3/data:/app/data
+      - /run/udev:/run/udev:ro
+    environment:
+      - TZ=${TZ}
