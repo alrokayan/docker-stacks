@@ -33,8 +33,8 @@ services:
       - ${DOCKER_VOLUMES}/mqtt/log:/mosquitto/log
     network_mode: host
 
-  zigbee2mqtt-gf:
-    container_name: zigbee2mqtt-gf
+  zigbee2mqtt-c1:
+    container_name: zigbee2mqtt-c1
     restart: unless-stopped
     image: koenkk/zigbee2mqtt
     logging:
@@ -44,29 +44,13 @@ services:
     privileged: true
     network_mode: host
     volumes:
-      - ${DOCKER_VOLUMES}/zigbee2mqtt-gf/data:/app/data
-      - /run/udev:/run/udev:ro
-    environment:
-      - TZ=${TZ}
-  
-  zigbee2mqtt-f1:
-    container_name: zigbee2mqtt-f1
-    restart: unless-stopped
-    image: koenkk/zigbee2mqtt
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "3"
-    privileged: true
-    network_mode: host
-    volumes:
-      - ${DOCKER_VOLUMES}/zigbee2mqtt-f1/data:/app/data
+      - ${DOCKER_VOLUMES}/zigbee2mqtt-c1/data:/app/data
       - /run/udev:/run/udev:ro
     environment:
       - TZ=${TZ}
 
-  zigbee2mqtt-f2:
-    container_name: zigbee2mqtt-f2
+  zigbee2mqtt-c2:
+    container_name: zigbee2mqtt-c2
     restart: unless-stopped
     image: koenkk/zigbee2mqtt
     logging:
@@ -76,13 +60,13 @@ services:
     privileged: true
     network_mode: host
     volumes:
-      - ${DOCKER_VOLUMES}/zigbee2mqtt-f2/data:/app/data
+      - ${DOCKER_VOLUMES}/zigbee2mqtt-c2/data:/app/data
       - /run/udev:/run/udev:ro
     environment:
       - TZ=${TZ}
 
-  zigbee2mqtt-f3:
-    container_name: zigbee2mqtt-f3
+  zigbee2mqtt-c3:
+    container_name: zigbee2mqtt-c3
     restart: unless-stopped
     image: koenkk/zigbee2mqtt
     logging:
@@ -92,7 +76,23 @@ services:
     privileged: true
     network_mode: host
     volumes:
-      - ${DOCKER_VOLUMES}/zigbee2mqtt-f3/data:/app/data
+      - ${DOCKER_VOLUMES}/zigbee2mqtt-c3/data:/app/data
+      - /run/udev:/run/udev:ro
+    environment:
+      - TZ=${TZ}
+
+  zigbee2mqtt-c4:
+    container_name: zigbee2mqtt-c4
+    restart: unless-stopped
+    image: koenkk/zigbee2mqtt
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    privileged: true
+    network_mode: host
+    volumes:
+      - ${DOCKER_VOLUMES}/zigbee2mqtt-c4/data:/app/data
       - /run/udev:/run/udev:ro
     environment:
       - TZ=${TZ}
