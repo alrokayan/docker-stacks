@@ -16,6 +16,7 @@ services:
     restart: unless-stopped
     privileged: true
     init: false
+    pid: host
     network_mode: host
 
   mqtt:
