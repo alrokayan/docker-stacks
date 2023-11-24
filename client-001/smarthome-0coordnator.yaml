@@ -15,6 +15,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
     privileged: true
+    init: false
     network_mode: host
       
   # esphome:
