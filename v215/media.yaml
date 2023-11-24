@@ -51,6 +51,8 @@ services:
       - ${MEDIA_VOLUMES}:${MEDIA_VOLUMES}
     environment:
       - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
   
   radarr:
     image: linuxserver/radarr
@@ -69,6 +71,8 @@ services:
       - ${MEDIA_VOLUMES}:${MEDIA_VOLUMES}
     environment:
       - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
 
   overseerr:
     image: sctx/overseerr:latest
@@ -79,10 +83,11 @@ services:
         max-file: "3"
     restart: unless-stopped
     environment:
-        - LOG_LEVEL=info
-        - TZ=${TZ}
+      - LOG_LEVEL=info
+      - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
     ports:
       - 5055:5055
     volumes:
       - ${DOCKER_LARGE_VOLUMES}/overseerr/data:/app/config
-
