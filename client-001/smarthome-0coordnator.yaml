@@ -1,5 +1,27 @@
 version: "3.9"
 services:
+  frigate:
+    container_name: frigate
+    privileged: true
+    network_mode: "host"
+    restart: unless-stopped
+    image: ghcr.io/blakeblackshear/frigate:stable
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    shm_size: "120mb"
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKER_VOLUMES}/frigate/data:/config
+      - frigate-camera-recordings:/media/frigate
+      - type: tmpfs
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+
   homeassistant:
     container_name: homeassistant
     image: homeassistant/home-assistant:stable
@@ -17,20 +39,6 @@ services:
     restart: unless-stopped
     privileged: true
     network_mode: host
-      
-  # esphome:
-  #   container_name: esphome
-  #   image: ghcr.io/esphome/esphome
-  #   logging:
-  #     options:
-  #       max-size: "10m"
-  #       max-file: "3"
-  #   volumes:
-  #     - ${DOCKER_LARGE_VOLUMES}/esphome/data:/config
-  #     - /etc/localtime:/etc/localtime:ro
-  #   restart: unless-stopped
-  #   privileged: true
-  #   network_mode: host
 
   mqtt-explorer:
     container_name: mqtt-explorer
@@ -94,6 +102,24 @@ services:
       - TZ=${TZ}
     volumes:
       - "${DOCKER_VOLUMES}/go2rtc/data:/config"
+
+volumes:
+  frigate-camera-recordings:
+    external: true
+
+  # esphome:
+  #   container_name: esphome
+  #   image: ghcr.io/esphome/esphome
+  #   logging:
+  #     options:
+  #       max-size: "10m"
+  #       max-file: "3"
+  #   volumes:
+  #     - ${DOCKER_LARGE_VOLUMES}/esphome/data:/config
+  #     - /etc/localtime:/etc/localtime:ro
+  #   restart: unless-stopped
+  #   privileged: true
+  #   network_mode: host
 
   # pxe:
   #   container_name: pxe
