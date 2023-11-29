@@ -36,7 +36,7 @@ services:
   zigbee2mqtt-c1:
     container_name: zigbee2mqtt-c1
     restart: unless-stopped
-    image: koenkk/zigbee2mqtt:latest-dev
+    image: koenkk/zigbee2mqtt
     logging:
       options:
         max-size: "10m"
@@ -52,7 +52,7 @@ services:
   zigbee2mqtt-c2:
     container_name: zigbee2mqtt-c2
     restart: unless-stopped
-    image: koenkk/zigbee2mqtt:latest-dev
+    image: koenkk/zigbee2mqtt
     logging:
       options:
         max-size: "10m"
@@ -68,7 +68,7 @@ services:
   zigbee2mqtt-c3:
     container_name: zigbee2mqtt-c3
     restart: unless-stopped
-    image: koenkk/zigbee2mqtt:latest-dev
+    image: koenkk/zigbee2mqtt
     logging:
       options:
         max-size: "10m"
@@ -84,7 +84,7 @@ services:
   zigbee2mqtt-c4:
     container_name: zigbee2mqtt-c4
     restart: unless-stopped
-    image: koenkk/zigbee2mqtt:latest-dev
+    image: koenkk/zigbee2mqtt
     logging:
       options:
         max-size: "10m"
