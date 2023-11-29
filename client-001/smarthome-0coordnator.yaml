@@ -80,20 +80,20 @@ services:
       COUNTRY: ${COUNTRY}
     restart: unless-stopped
 
-  # go2rtc:
-  #   image: alexxit/go2rtc
-  #   logging:
-  #     options:
-  #       max-size: "10m"
-  #       max-file: "3"
-  #   network_mode: host
-  #   container_name: go2rtc
-  #   privileged: true 
-  #   restart: unless-stopped
-  #   environment:
-  #     - TZ=${TZ}
-  #   volumes:
-  #     - "${DOCKER_VOLUMES}/go2rtc/data:/config"
+  go2rtc:
+    image: alexxit/go2rtc
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    network_mode: host
+    container_name: go2rtc
+    privileged: true 
+    restart: unless-stopped
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - "${DOCKER_VOLUMES}/go2rtc/data:/config"
 
   # pxe:
   #   container_name: pxe
