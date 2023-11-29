@@ -29,8 +29,7 @@ services:
       - TZ=Asia/Riyadh
     restart: unless-stopped
     volumes:
-      - ${DOCKER_VOLUMES}/mqtt/config:/mosquitto/config
-      - ${DOCKER_VOLUMES}/mqtt/data:/mosquitto/data
+      - ${DOCKER_VOLUMES}/mqtt/data:/mosquitto/config
       - ${DOCKER_VOLUMES}/mqtt/log:/mosquitto/log
     network_mode: host
 
