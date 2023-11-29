@@ -88,24 +88,24 @@ services:
       COUNTRY: ${COUNTRY}
     restart: unless-stopped
 
-  go2rtc:
-    image: alexxit/go2rtc
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "3"
-    network_mode: host
-    container_name: go2rtc
-    privileged: true 
-    restart: unless-stopped
-    environment:
-      - TZ=${TZ}
-    volumes:
-      - "${DOCKER_VOLUMES}/go2rtc/data:/config"
-
 volumes:
   frigate-camera-recordings:
     external: true
+
+  # go2rtc:
+  #   image: alexxit/go2rtc
+  #   logging:
+  #     options:
+  #       max-size: "10m"
+  #       max-file: "3"
+  #   network_mode: host
+  #   container_name: go2rtc
+  #   privileged: true 
+  #   restart: unless-stopped
+  #   environment:
+  #     - TZ=${TZ}
+  #   volumes:
+  #     - "${DOCKER_VOLUMES}/go2rtc/data:/config"
 
   # esphome:
   #   container_name: esphome
