@@ -109,12 +109,7 @@ services:
 
   watchtower:
     environment:
-      WATCHTOWER_HTTP_API_TOKEN: ${WATCHTOWER_HTTP_API_TOKEN}
-      WATCHTOWER_HTTP_API_UPDATE: $WATCHTOWER_HTTP_API_UPDATE}
-      WATCHTOWER_HTTP_API_PERIODIC_POLLS: ${WATCHTOWER_HTTP_API_PERIODIC_POLLS}
-      WATCHTOWER_SCHEDULE: ${WATCHTOWER_SCHEDULE}
       TZ: ${TZ}
-      WATCHTOWER_CLEANUP: ${WATCHTOWER_CLEANUP}
     image: containrrr/watchtower
     logging:
       options:
@@ -124,5 +119,3 @@ services:
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    ports:
-      - 10444:8080

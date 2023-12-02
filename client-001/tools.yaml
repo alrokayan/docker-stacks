@@ -81,18 +81,3 @@ services:
       - ${DOCKER_VOLUMES}/filebrowser/data/database:/database
     ports:
       - 8080:80
-
-  watchtower:
-    environment:
-      TZ: ${TZ}
-    image: containrrr/watchtower
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "3"
-    container_name: watchtower
-    restart: unless-stopped
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    ports:
-      - 10444:8080
