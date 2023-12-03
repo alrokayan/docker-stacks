@@ -44,24 +44,6 @@ services:
     ports:
       - 8200:8200
     restart: unless-stopped
-
-  tailscale:
-    privileged: true
-    network_mode: "host"
-    container_name: tailscale
-    image: tailscale/tailscale:latest
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "3"
-    volumes:
-        - "${DOCKER_LARGE_VOLUMES}/tailscale/data:/var/lib"
-        - "/dev/net/tun:/dev/net/tun"
-    cap_add:
-        - NET_ADMIN
-        - NET_RAW
-    command: tailscaled
-    restart: unless-stopped
     
   filebrowser:
     container_name: filebrowser
@@ -135,3 +117,21 @@ networks:
         - subnet: "${MACVLAN_SUBNET}"
           ip_range: "${MACVLAN_ADGUARD_IP}/32"
           gateway: "${MACVLAN_GATEWAY}"
+
+  # tailscale:
+  #   privileged: true
+  #   network_mode: "host"
+  #   container_name: tailscale
+  #   image: tailscale/tailscale:latest
+  #   logging:
+  #     options:
+  #       max-size: "10m"
+  #       max-file: "3"
+  #   volumes:
+  #       - "${DOCKER_LARGE_VOLUMES}/tailscale/data:/var/lib"
+  #       - "/dev/net/tun:/dev/net/tun"
+  #   cap_add:
+  #       - NET_ADMIN
+  #       - NET_RAW
+  #   command: tailscaled
+  #   restart: unless-stopped
