@@ -119,3 +119,44 @@ services:
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+
+adguardhome:
+  container_name: adguardhome
+  image: adguard/adguardhome
+  restart: unless-stopped
+  networks:
+    dockervlan:
+      ipv4_address: ${MACVLAN_ADGUARD_IP} # IP address inside the defined range
+  ports:
+        # DNS
+        - 53:53
+        # DHCP server
+        # - 67:67/udp
+        # - 68:68/tcp
+        # - 68:68/udp
+        # HTTPS/DNS-over-HTTPS
+        - 443:443/tcp
+        # DNS-over-TLS
+        # - 853:853/tcp
+        # DNS-over-QUIC
+        # - 784:784/udp
+        # DNSCrypt
+        # - 5443:5443/tcp
+        # - 5443:5443/udp
+        # WebUI
+        - 3000:3000/tcp
+  volumes:
+    - ${DOCKER_VOLUMES}/adguard/data:/opt/adguardhome/conf
+    - ${DOCKER_VOLUMES}/adguard/work:/opt/adguardhome/work
+
+networks:
+  dockervlan:
+    name: dockervlan
+    driver: macvlan
+    driver_opts:
+      parent: ${NIC} # using ifconfig
+    ipam:
+      config:
+        - subnet: "${MACVLAN_SUBNET}"
+          ip_range: "${MACVLAN_ADGUARD_IP}/32"
+          gateway: "${MACVLAN_GATEWAY}"
