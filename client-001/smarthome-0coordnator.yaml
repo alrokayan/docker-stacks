@@ -88,23 +88,23 @@ services:
       COUNTRY: ${COUNTRY}
     restart: unless-stopped
 
-volumes:
-  frigate-camera-recordings:
-    external: true
-
   secondary-dns-adguard:
     container_name: secondary-dns-adguard
     image: adguard/adguardhome
     restart: unless-stopped
     networks:
       dockervlan:
-        ipv4_address: ${MACVLAN_ADGUARD_IP} # IP address inside the defined range
+        ipv4_address: ${MACVLAN_ADGUARD_IP}
     ports:
       - 53:53
       - 3000:3000/tcp
     volumes:
       - ${DOCKER_VOLUMES}/adguard/data:/opt/adguardhome/conf
       - ${DOCKER_VOLUMES}/adguard/work:/opt/adguardhome/work
+
+volumes:
+  frigate-camera-recordings:
+    external: true
 
 networks:
   dockervlan:
@@ -117,7 +117,7 @@ networks:
         - subnet: "${MACVLAN_SUBNET}"
           ip_range: "${MACVLAN_ADGUARD_IP}/32"
           gateway: "${MACVLAN_GATEWAY}"
-          
+
   # go2rtc:
   #   image: alexxit/go2rtc
   #   logging:

@@ -83,7 +83,7 @@ services:
     restart: unless-stopped
     networks:
       dockervlan:
-        ipv4_address: ${MACVLAN_ADGUARD_IP} # IP address inside the defined range
+        ipv4_address: ${MACVLAN_ADGUARD_IP}
     ports:
       - 53:53
       - 3000:3000/tcp
