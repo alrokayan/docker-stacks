@@ -85,9 +85,22 @@ services:
       dockervlan:
         ipv4_address: ${MACVLAN_ADGUARD_IP}
     ports:
+      # DNS
       - 53:53
-      - 5353:5353
-      - 443:443
+      # DHCP server
+      # - 67:67/udp
+      # - 68:68/tcp
+      # - 68:68/udp
+      # HTTPS/DNS-over-HTTPS
+      - 443:443/tcp
+      # DNS-over-TLS
+      # - 853:853/tcp
+      # DNS-over-QUIC
+      # - 784:784/udp
+      # DNSCrypt
+      # - 5443:5443/tcp
+      # - 5443:5443/udp
+      # WebUI
       - 3000:3000/tcp
     volumes:
       - ${DOCKER_VOLUMES}/adguard/data:/opt/adguardhome/conf
@@ -104,50 +117,3 @@ networks:
         - subnet: "${MACVLAN_SUBNET}"
           ip_range: "${MACVLAN_ADGUARD_IP}/32"
           gateway: "${MACVLAN_GATEWAY}"
-
-  # adguardhome:
-  #   container_name: adguardhome
-  #   image: adguard/adguardhome
-  #   restart: unless-stopped
-  #   networks:
-  #     dockervlan:
-  #       ipv4_address: ${MACVLAN_ADGUARD_IP} # IP address inside the defined range
-  #   ports:
-  #     # DNS
-  #     - 53:53
-  #     # DHCP server
-  #     # - 67:67/udp
-  #     # - 68:68/tcp
-  #     # - 68:68/udp
-  #     # HTTPS/DNS-over-HTTPS
-  #     - 443:443/tcp
-  #     # DNS-over-TLS
-  #     # - 853:853/tcp
-  #     # DNS-over-QUIC
-  #     # - 784:784/udp
-  #     # DNSCrypt
-  #     # - 5443:5443/tcp
-  #     # - 5443:5443/udp
-  #     # WebUI
-  #     - 3000:3000/tcp
-  #   volumes:
-  #     - ${DOCKER_VOLUMES}/adguard/data:/opt/adguardhome/conf
-  #     - ${DOCKER_VOLUMES}/adguard/work:/opt/adguardhome/work
-
-  # tailscale:
-  #   privileged: true
-  #   network_mode: "host"
-  #   container_name: tailscale
-  #   image: tailscale/tailscale:latest
-  #   logging:
-  #     options:
-  #       max-size: "10m"
-  #       max-file: "3"
-  #   volumes:
-  #       - "${DOCKER_LARGE_VOLUMES}/tailscale/data:/var/lib"
-  #       - "/dev/net/tun:/dev/net/tun"
-  #   cap_add:
-  #       - NET_ADMIN
-  #       - NET_RAW
-  #   command: tailscaled
-  #   restart: unless-stopped

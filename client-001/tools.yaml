@@ -64,20 +64,3 @@ services:
     ports:
       - 8080:80
 
-  # tailscale:
-  #   container_name: tailscale
-  #   privileged: true
-  #   network_mode: "host"
-  #   image: tailscale/tailscale:stable
-  #   logging:
-  #     options:
-  #       max-size: "10m"
-  #       max-file: "3"
-  #   volumes:
-  #       - "${DOCKER_VOLUMES}/tailscale/data:/var/lib"
-  #       - "/dev/net/tun:/dev/net/tun"
-  #   cap_add:
-  #       - net_admin
-  #       - sys_module
-  #   command: tailscaled
-  #   restart: unless-stopped
