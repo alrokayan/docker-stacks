@@ -1,20 +1,20 @@
 version: '3.8'
 
 services:
-  plex:
-    image: linuxserver/plex:latest
-    container_name: plex
-    network_mode: host
-    environment:
-      - PUID=${PLEX_PUID}
-      - PGID=${PLEX_PGID}
-      - VERSION=docker
-    devices:
-      - /dev/dri:/dev/dri
-    volumes:
-      - ${DOCKER_LARGE_VOLUMES}/plex/data:/config
-      - ${MEDIA_VOLUMES}:${MEDIA_VOLUMES}
-    restart: unless-stopped
+  # plex:
+  #   image: linuxserver/plex:latest
+  #   container_name: plex
+  #   network_mode: host
+  #   environment:
+  #     - PUID=${PLEX_PUID}
+  #     - PGID=${PLEX_PGID}
+  #     - VERSION=docker
+  #   devices:
+  #     - /dev/dri:/dev/dri
+  #   volumes:
+  #     - ${DOCKER_LARGE_VOLUMES}/plex/data:/config
+  #     - ${MEDIA_VOLUMES}:${MEDIA_VOLUMES}
+  #   restart: unless-stopped
 
   nzbget:
     image: lscr.io/linuxserver/nzbget:latest
