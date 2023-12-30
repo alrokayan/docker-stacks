@@ -1,21 +1,6 @@
 version: '3.8'
 
 services:
-  # plex:
-  #   image: linuxserver/plex:latest
-  #   container_name: plex
-  #   network_mode: host
-  #   environment:
-  #     - PUID=${PLEX_PUID}
-  #     - PGID=${PLEX_PGID}
-  #     - VERSION=docker
-  #   devices:
-  #     - /dev/dri:/dev/dri
-  #   volumes:
-  #     - ${DOCKER_LARGE_VOLUMES}/plex/data:/config
-  #     - ${MEDIA_VOLUMES}:${MEDIA_VOLUMES}
-  #   restart: unless-stopped
-
   nzbget:
     image: lscr.io/linuxserver/nzbget:latest
     logging:
@@ -29,7 +14,7 @@ services:
       - TZ=${TZ}
     volumes:
       - ${DOCKER_VOLUMES}/nzbget/data:/config
-      - ${MEDIA_VOLUMES}:${MEDIA_VOLUMES}
+      - media:${MEDIA_VOLUMES}
     ports:
       - 6789:6789
     restart: unless-stopped
@@ -48,7 +33,7 @@ services:
       - 8989:8989
     volumes:
       - ${DOCKER_VOLUMES}/sonarr/data:/config
-      - ${MEDIA_VOLUMES}:${MEDIA_VOLUMES}
+      - media:${MEDIA_VOLUMES}
     environment:
       - TZ=${TZ}
       - PUID=${PUID}
@@ -68,7 +53,7 @@ services:
       - 7878:7878
     volumes:
       - ${DOCKER_VOLUMES}/radarr/data:/config
-      - ${MEDIA_VOLUMES}:${MEDIA_VOLUMES}
+      - media:${MEDIA_VOLUMES}
     environment:
       - TZ=${TZ}
       - PUID=${PUID}
@@ -91,3 +76,11 @@ services:
       - 5055:5055
     volumes:
       - ${DOCKER_LARGE_VOLUMES}/overseerr/data:/app/config
+
+volumes:
+  media:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NFS_SERVER}
+      device: :${MEDIA_VOLUMES}
