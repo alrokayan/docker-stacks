@@ -15,6 +15,7 @@ services:
     volumes:
       - ${DOCKER_VOLUMES}/nzbget/data:/config
       - media:${MEDIA_VOLUMES}
+      - intermediate:/mnt/intermediate
       - /mnt/usb1:/mnt/usb1
     ports:
       - 6789:6789
@@ -85,3 +86,9 @@ volumes:
       type: nfs
       o: addr=${NFS_SERVER}
       device: :${MEDIA_VOLUMES}
+  intermediate:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NFS_SERVER}
+      device: :/mnt/intermediate
