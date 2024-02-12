@@ -91,4 +91,4 @@ volumes:
     driver_opts:
       type: nfs
       o: addr=${NFS_SERVER}
-      device: :/mnt/intermediate
+      device: :/mnt/intermediate/data
